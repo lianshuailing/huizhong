@@ -1,0 +1,56 @@
+server:
+  port: 8089
+spring:
+  application:
+    name: order-service
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/huiyou?useUnicode=true&characterEncoding=utf8&autoReconnect=true&allowMultiQueries=true&useSSL=false
+    username: root
+    password: root
+#    hikari:
+#      maximum-pool-size: 200
+#      minimum-idle: 100
+#  rabbitmq:
+#    host: 192.168.1.116
+#    username: guest
+#    password: guest
+#    virtual-host: /huizhong
+#    template:
+#      queue: huizhong.order.delay.queue
+#    publisher-confirms: true
+#  redis:
+#    host: 192.168.1.126
+  jackson:
+    default-property-inclusion: non_null
+eureka:
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:10086/eureka
+    registry-fetch-interval-seconds: 5 # 5秒
+  instance:
+    instance-id: ${spring.application.name}:${server.port}
+    prefer-ip-address: true  #当你获取host时，返回的不是主机名，而是ip
+    ip-address: 127.0.0.1
+    lease-renewal-interval-in-seconds: 5
+    lease-expiration-duration-in-seconds: 10
+
+mybatis:
+  type-aliases-package: com.huizhong.order.pojo
+
+
+hz:
+  jwt:
+    pubKeyPath: F:/Test/rsa/rsa.pub # 公钥地址
+    cookieName: HZ_TOKEN # cookie名称
+  worker:
+    workerId: 1
+    dataCenterId: 1
+  pay:
+    appID: wx8397f8696b538317
+    mchID: 1473426802
+    key: T6m9iK73b0kn9g5v426MKfHQH7X8rKwb
+    httpConnectTimeoutMs: 1000
+    httpReadTimeoutMs: 8000
+    tradeType: NATIVE
+    spbillCreateIp: 127.0.0.1
+    notifyUrl: http://ueizdi.natappfree.cc/wxpay/notify

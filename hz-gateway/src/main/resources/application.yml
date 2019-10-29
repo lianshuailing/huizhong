@@ -1,0 +1,54 @@
+server:
+  port: 10010
+spring:
+  application:
+    name: api-gateway
+eureka:
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:10086/eureka
+#    registry-fetch-interval-seconds: 30 可以配置拉取时长
+zuul:
+  prefix: /api # 添加路由前缀
+  routes:
+    item-service: /item/** # 将商品微服务映射到/item/**
+    search-service: /search/** # 将查询微服务映射到/search/**
+    goods-service: /goods/** # 将详情页微服务映射到/goods/**
+    user-service: /user/**
+    auth-service: /auth/**
+    cart-service: /cart/**
+    order-service: /order/**
+    upload-service: #upload-service: /upload/**   localhost:8082/api/upload/upload/image  路径这样
+      path: /upload/**
+      serviceId: upload-service
+      strip-prefix: false #会把后台配置的前缀 即 /upload/ 去掉
+  add-host-header: true # 携带请求本身的host头信息
+  sensitive-headers: # 禁止使用的头信息，设置为null，否则set-cookie无效
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMillisecond: 5000 # 熔断超时时长：1000ms
+ribbon:
+  ConnectTimeout: 1000 # ribbon连接超时时间(ms)
+  ReadTimeout: 3500 # ribbon通信(读取)超时时间(ms)
+  MaxAutoRetriesNextServer: 0 # 同一服务不同实例的重试次数
+  MaxAutoRetries: 0 # 同一实例的重试次数
+
+
+hz:
+  jwt:
+    pubKeyPath: F:/Test/rsa/rsa.pub # 公钥地址
+    expire: 30 # 过期时间,单位分钟
+    cookieMaxAge: 1800 # cookie过期时间
+    cookieName: HZ_TOKEN # cookie名称
+  filter:
+    allowPaths:
+      - /api/auth
+      - /api/search
+      - /api/user/register
+      - /api/user/check
+      - /api/user/code
+      - /api/item # 后台暂时没有做 登录、校验、暂时都放行
